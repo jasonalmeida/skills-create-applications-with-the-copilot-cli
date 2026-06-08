@@ -18,9 +18,31 @@ describe('Calculator basic operations', () => {
   });
 });
 
+describe('Extended operations', () => {
+  test('modulo: 5 % 2 = 1', () => {
+    expect(calc.modulo(5, 2)).toBe(1);
+  });
+
+  test('power: 2 ^ 3 = 8', () => {
+    expect(calc.power(2, 3)).toBe(8);
+  });
+
+  test('squareRoot: sqrt(16) = 4', () => {
+    expect(calc.squareRoot(16)).toBe(4);
+  });
+});
+
 describe('Calculator edge cases', () => {
   test('division by zero throws', () => {
     expect(() => calc.divide(1, 0)).toThrow('Division by zero');
+  });
+
+  test('modulo by zero throws', () => {
+    expect(() => calc.modulo(5, 0)).toThrow('Modulo by zero');
+  });
+
+  test('square root of negative number throws', () => {
+    expect(() => calc.squareRoot(-4)).toThrow('Cannot take square root of negative number');
   });
 
   test('supports negative numbers and floats', () => {
