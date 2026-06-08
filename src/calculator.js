@@ -2,20 +2,11 @@
 "use strict";
 
 /**
- * Node.js CLI Calculator
- * Supported operations:
- *  - add      (addition)
- *  - subtract (subtraction)
- *  - multiply (multiplication)
- *  - divide   (division)
- *
- * Usage examples:
- *   node src/calculator.js add 2 3       -> 5
- *   node src/calculator.js subtract 5 2  -> 3
- *   node src/calculator.js multiply 4 6  -> 24
- *   node src/calculator.js divide 10 2   -> 5
+ * CLI wrapper that uses src/lib/calculator.js for arithmetic.
+ * Keeps the original CLI behaviour (parsing, validation, exit codes).
  */
 
+const { add, subtract, multiply, divide } = require('./lib/calculator');
 const [,, cmd, aRaw, bRaw] = process.argv;
 
 function usage() {
@@ -48,31 +39,28 @@ if (a === null || b === null) {
 
 let result;
 
-switch (cmd.toLowerCase()) {
-  case 'add':
-    // addition
-    result = a + b;
-    break;
-  case 'subtract':
-    // subtraction
-    result = a - b;
-    break;
-  case 'multiply':
-    // multiplication
-    result = a * b;
-    break;
-  case 'divide':
-    // division
-    if (b === 0) {
-      console.error('Error: division by zero is not allowed.');
+try {
+  switch (cmd.toLowerCase()) {
+    case 'add':
+      result = add(a, b);
+      break;
+    case 'subtract':
+      result = subtract(a, b);
+      break;
+    case 'multiply':
+      result = multiply(a, b);
+      break;
+    case 'divide':
+      result = divide(a, b);
+      break;
+    default:
+      console.error(`Error: unknown command '${cmd}'.`);
+      usage();
       process.exit(1);
-    }
-    result = a / b;
-    break;
-  default:
-    console.error(`Error: unknown command '${cmd}'.`);
-    usage();
-    process.exit(1);
+  }
+} catch (err) {
+  console.error('Error:', err.message);
+  process.exit(1);
 }
 
 console.log(result);
